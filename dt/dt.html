@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app" v-cloak>
+    {{city}}
+    <br>
+    <button @click="cc">点击</button>
+    <ul>
+        <li v-for="(item,index) in info">{{index + 1}}--------------{{item}}</li>
+    </ul>
+    <hr>
+    <input type="text" v-model="ques">
+    <button @click="dt">查询</button>
+    {{msg}}
+</div>
+
+<!-- http://wthrcdn.etouch.cn/weather_mini?city=%E5%8D%97%E4%BA%AC -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script>
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            message: 'aa',
+            city: '南京',
+            msg: '',
+            info: [],
+            ques:''
+        },
+        methods: {
+            cc() {
+                var that = this;
+                axios.get('http://wthrcdn.etouch.cn/weather_mini?city=' + this.city)
+                    // .then(function (response) {
+                    //     // console.log(response)
+                    //     that.info = response.data.data.forecast;
+                    // })
+                    .then(response => {
+                        // console.log(that.city)
+                        that.info = response.data.data.forecast;
+                    })
+                    .catch(function (error) {
+                        consle.log(error);
+                    })
+            },
+            dt() {
+                var that = this;
+                axios.post('http://badyun.yhfx.xyz/', {q: this.ques})
+                    .then(function (response) {
+                        // console.log(that.ques)
+                        console.log(response)
+                        that.msg = response.data.question;
+                    })
+                    .catch(function (err) {
+                        console.log(err)
+                    })
+            }
+        } 
+    })
+</script>
+</body>
+</html>
